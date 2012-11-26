@@ -1,0 +1,17 @@
+<package>
+  <description brief="arl_DCOF">
+
+     arl_DCOF
+
+  </description>
+  <author>parcon</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/arl_DCOF</url>
+  <depend package="roscpp"/>
+  <depend package="pcl_ros"/>
+  <depend package="cereal_port"/>
+
+</package>
+
+
