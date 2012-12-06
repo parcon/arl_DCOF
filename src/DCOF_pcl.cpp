@@ -2,7 +2,7 @@
 Parker Conroy
 Richard Kirby
 ARLab @ University of Utah
-For Advanced Mechatronics (ME6240) Semester Project
+For Advanced Mechatronics (ME6960) Semester Project
 
 This code takes serial data over the wire from the DCOF and build a PCL point cloud for the purposes of visualization and data processing
 
@@ -17,7 +17,7 @@ target_link_libraries(DCOF_pcl cereal_port) in Cmake
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 #include <cereal_port/CerealPort.h>
-
+#include <geometry_msgs/Vector3.h>
 
 #define SERIAL_PORT "/dev/ttyUSB0"
 #define SERIAL_SPEED 57000
@@ -30,13 +30,16 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 int main(int argc, char** argv)
 {
   ros::init (argc, argv, "publish_DCOFS");
+  ros::Rate loop_rate(500);
   ros::NodeHandle node;
   ros::Publisher pub = node.advertise<PointCloud> ("custom_laser_scaner", 1);
-
+  ros::Publisher mouse_pub = node.advertise<Vector3> ("mouse_commands", 1);
+  
   cereal::CerealPort device;
   char serial_data[REPLY_SIZE];
   char * pEnd;
   long int enc1, enc2, dist;
+  geometry_msgs::Vector3 mouse_msg;
 
   try{ device.open(SERIAL_PORT, SERIAL_SPEED); }
   catch(cereal::Exception& e)
@@ -50,15 +53,13 @@ int main(int argc, char** argv)
   PointCloud::Ptr msg (new PointCloud);
   msg->header.frame_id = "Laser_Frame";
   msg->height = msg->width = 1;
-  
 
-  ros::Rate loop_rate(4);
   while (node.ok() && ros::ok())//while ROS and node are working
   {
         try{ device.read(serial_data, REPLY_SIZE, TIMEOUT); } // Get the reply, the last value is the timeout in ms
         catch(cereal::TimeoutException& e)
         {
-            ROS_ERROR("Timeout!");
+            ROS_ERROR("Serial Timeout!");
         }
         ROS_INFO("Serial Message: %s", serial_data);
 /*
@@ -85,6 +86,12 @@ z=dist*cos(theta_y);
    msg->points.push_back (pcl::PointXYZ(1.0, 2.0, 3.0));
    msg->header.stamp = ros::Time::now ();
    pub.publish (msg);
+
+mouse_msg.x=x;
+mouse_msg.y=y;
+mouse_msg.z=z;
+mouse_pub.publish(mouse_msg);
+
 
   ros::spinOnce ();
   loop_rate.sleep ();
