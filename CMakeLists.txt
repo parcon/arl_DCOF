@@ -18,7 +18,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
 
-
+rosbuild_add_executable(Mouse src/mouse_control.cpp)
 rosbuild_add_executable(Scanner src/DCOF_pcl.cpp)
 target_link_libraries(Scanner cereal_port)
 
