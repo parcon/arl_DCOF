@@ -19,10 +19,11 @@ target_link_libraries(DCOF_pcl cereal_port) in Cmake
 #include <cereal_port/CerealPort.h>
 #include <geometry_msgs/Vector3.h>
 
-#define SERIAL_PORT "/dev/ttyACM0"
-#define SERIAL_SPEED 57000
+#define SERIAL_PORT "/dev/ttyUSB0"
+//#define SERIAL_SPEED 57000
+#define SERIAL_SPEED 57600
 #define REPLY_SIZE 500
-#define TIMEOUT 1000
+#define TIMEOUT 100
 
 
 //reply_size 57

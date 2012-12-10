@@ -17,9 +17,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
-
+rosbuild_add_executable(Mouse_test src/mouse_test.cpp)
 rosbuild_add_executable(Mouse src/mouse_control.cpp)
 rosbuild_add_executable(Scanner src/DCOF_pcl.cpp)
+rosbuild_add_executable(Scanner_faked src/DCOF_pcl_faked.cpp)
 target_link_libraries(Scanner cereal_port)
 
 #uncomment if you have defined messages
